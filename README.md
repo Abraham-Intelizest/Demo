@@ -1,16 +1,19 @@
-[![Build Status](https://travis-ci.org/chrishantha/sample-java-programs.svg?branch=master)](https://travis-ci.org/chrishantha/sample-java-programs)
+Sample to show allocations in a Java Flight Recording
+=====================================================
 
-Sample Java Programs
-====================
+This program checks whether a number is prime.
 
-This repository contains some sample programs. All are Maven projects and can be run directly using "java -jar"
+Run the program and also make a profiling recording.
 
-## How to build
+### How to run
+`java -Xms64m -Xmx64m -XX:+UnlockDiagnosticVMOptions -XX:+DebugNonSafepoints -XX:+UnlockCommercialFeatures -XX:+FlightRecorder -XX:StartFlightRecording=settings=profile,duration=30s,name=Allocations,filename=allocations.jfr -XX:FlightRecorderOptions=loglevel=info -jar target/allocations.jar`
 
-Run `mvn clean install` to build all sample programs
+### Analyzing Java Flight Recording
 
-## License
+In Memory -> Allocation tab, you should see a high allocation rate.
 
-Copyright (C) 2015 M. Isuru Tharanga Chrishantha Perera
+Also, see Memory -> Garbage Collections tab and check the frequency of GC events.
 
-Licensed under the Apache License, Version 2.0
+### Improving Performance
+
+Try the program again after changing `Long` types to primitive `long`.
