@@ -1,149 +1,156 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    # Copyright 2015 M. Isuru Tharanga Chrishantha Perera
+    #
+    # Licensed under the Apache License, Version 2.0 (the "License");
+    # you may not use this file except in compliance with the License.
+    # You may obtain a copy of the License at
+    #
+    # http://www.apache.org/licenses/LICENSE-2.0
+    #
+    # Unless required by applicable law or agreed to in writing, software
+    # distributed under the License is distributed on an "AS IS" BASIS,
+    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    # See the License for the specific language governing permissions and
+    # limitations under the License.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.javacreed.examples</groupId>
-	<artifactId>hello-world</artifactId>
-	<version>1.0.0</version>
-	<packaging>jar</packaging>
+    <groupId>com.github.chrishantha.sample</groupId>
+    <artifactId>java-samples</artifactId>
+    <version>0.0.2-SNAPSHOT</version>
+    <packaging>pom</packaging>
 
-	<name>Hello World</name>
-	<description>A simple hello world project</description>
-	<url>https://github.com/javacreed/${project.artifactId}</url>
-	<inceptionYear>${project.inceptionYear}</inceptionYear>
-	<organization>
-		<name>${project.organization.name}</name>
-		<url>${project.organization.url}</url>
-	</organization>
+    <name>Java Samples</name>
+    <description>Java Sample Code to be used in examples (in blog, etc)</description>
+    <inceptionYear>2015</inceptionYear>
 
-	<contributors>
-		<contributor>
-			<name>Albert Attard</name>
-			<email>albert@javacreed.com</email>
-		</contributor>
-	</contributors>
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
-	<licenses>
-		<license>
-			<name>The Apache Software License, Version 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-			<distribution>repo</distribution>
-		</license>
-	</licenses>
+    <scm>
+        <url>https://github.com/chrishantha/sample-java-programs.git</url>
+        <developerConnection>scm:git:https://github.com/chrishantha/sample-java-programs.git</developerConnection>
+        <connection>scm:git:https://github.com/chrishantha/sample-java-programs.git</connection>
+        <tag>HEAD</tag>
+    </scm>
 
-	<scm>
-		<connection>scm:git:git://github.com/javacreed/hello-world.git</connection>
-		<developerConnection>scm:git:git://github.com/javacreed/hello-world.git</developerConnection>
-		<url>https://github.com/javacreed/hello-world</url>
-	</scm>
+    <modules>
+        <module>base</module>
+        <module>highcpu</module>
+        <module>hotmethods</module>
+        <module>latencies</module>
+        <module>allocations</module>
+        <module>deadlock</module>
+        <module>memoryleak</module>
+        <module>threadleak</module>
+        <module>memoryref</module>
+    </modules>
 
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.beust</groupId>
+                <artifactId>jcommander</artifactId>
+                <version>${jcommander.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.chrishantha.sample</groupId>
+                <artifactId>base</artifactId>
+                <version>${samples.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.hdrhistogram</groupId>
+                <artifactId>HdrHistogram</artifactId>
+                <version>${hdrhistogram.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
-		<project.inceptionYear>2012</project.inceptionYear>
-		<project.organization.name>Java Creed</project.organization.name>
-		<project.organization.url>https://github.com/javacreed/</project.organization.url>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-shade-plugin</artifactId>
+                    <version>3.2.1</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>shade</goal>
+                            </goals>
+                            <configuration>
+                                <transformers>
+                                    <transformer
+                                            implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                        <mainClass>com.github.chrishantha.sample.base.App</mainClass>
+                                    </transformer>
+                                </transformers>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.0</version>
+                <configuration>
+                    <compilerVersion>${javac.target}</compilerVersion>
+                    <source>${javac.target}</source>
+                    <target>${javac.target}</target>
+                </configuration>
+            </plugin>
+        </plugins>
+        <finalName>${project.name}</finalName>
+    </build>
 
-		<surefire.version>2.20.1</surefire.version>
-		<jacoco.version>0.7.9</jacoco.version>
-		<reports.version>2.9</reports.version>
-		<exec.version>1.6.0</exec.version>
-		<license.version>1.16</license.version>
-	</properties>
+    <profiles>
+        <profile>
+            <id>pedantic</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.rat</groupId>
+                        <artifactId>apache-rat-plugin</artifactId>
+                        <version>0.13</version>
+                        <configuration>
+                            <excludes>
+                                <exclude>**/README.md</exclude>
+                                <exclude>.travis.yml</exclude>
+                                <exclude>**/*.svg</exclude>
+                                <exclude>dependency-reduced-pom.xml</exclude>
+                                <exclude>**/com.github.chrishantha.sample.base.SampleApplication</exclude>
+                            </excludes>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
-	<build>
-		<defaultGoal>clean install exec:java</defaultGoal>
-
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>${surefire.version}</version>
-				<configuration>
-					<!-- Sets the VM argument line used when unit tests are run. -->
-					<argLine>${surefireArgLine}</argLine>
-					<!-- Skips unit tests if the value of skip.unit.tests property is true -->
-					<skipTests>${skip.unit.tests}</skipTests>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>org.jacoco</groupId>
-				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>${jacoco.version}</version>
-				<executions>
-					<!-- Prepares the property pointing to the JaCoCo runtime agent which 
-						is passed as VM argument when Maven the Surefire plugin is executed. -->
-					<execution>
-						<id>pre-unit-test</id>
-						<goals>
-							<goal>prepare-agent</goal>
-						</goals>
-						<configuration>
-							<!-- Sets the path to the file which contains the execution data. -->
-							<destFile>${project.build.directory}/coverage-reports/jacoco-ut.exec</destFile>
-							<!-- Sets the name of the property containing the settings for JaCoCo 
-								runtime agent. -->
-							<propertyName>surefireArgLine</propertyName>
-						</configuration>
-					</execution>
-					<!-- Ensures that the code coverage report for unit tests is created 
-						after unit tests have been run. -->
-					<execution>
-						<id>post-unit-test</id>
-						<phase>test</phase>
-						<goals>
-							<goal>report</goal>
-						</goals>
-						<configuration>
-							<!-- Sets the path to the file which contains the execution data. -->
-							<dataFile>${project.build.directory}/coverage-reports/jacoco-ut.exec</dataFile>
-							<!-- Sets the output directory for the code coverage report. -->
-							<outputDirectory>${project.reporting.outputDirectory}/jacoco-ut</outputDirectory>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>exec-maven-plugin</artifactId>
-				<version>${exec.version}</version>
-				<configuration>
-					<mainClass>com.javacreed.examples.Main</mainClass>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>license-maven-plugin</artifactId>
-				<version>${license.version}</version>
-				<configuration>
-					<verbose>false</verbose>
-				</configuration>
-				<executions>
-					<execution>
-						<id>first</id>
-						<goals>
-							<goal>update-file-header</goal>
-							<goal>add-third-party</goal>
-						</goals>
-						<phase>process-sources</phase>
-						<configuration>
-							<addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>
-							<licenseName>apache_v2</licenseName>
-							<sortArtifactByName>true</sortArtifactByName>
-							<roots>
-								<root>src/main</root>
-								<root>src/test</root>
-							</roots>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <javac.target>1.8</javac.target>
+        <samples.version>0.0.2-SNAPSHOT</samples.version>
+        <jcommander.version>1.72</jcommander.version>
+        <hdrhistogram.version>2.1.11</hdrhistogram.version>
+    </properties>
 </project>
